@@ -1,10 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) full stack project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+It includes 4 parts:
+- ✅ Part 1 – Simple REST API (GET & POST methods for Todos)
+- ✅ Part 2 – Integration with Notion API using Zod validation
+- ✅ Part 3 – AI Chat with OpenAI API
+- ✅ Part 4 – PDF answer upload (you can check the PDF inside project folder)
 
-First, run the development server:
+---
 
-```bash
+Getting Started
+
+First, install the dependencies:
+
+npm install
+
+Then, run the development server:
+
 npm run dev
 # or
 yarn dev
@@ -12,25 +23,52 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+Now open http://localhost:3000 in your browser to check the app.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📦 Project Parts
+▶️ Part 1 – REST API with Frontend (GET & POST for todos)
+app/page.tsx → Contains buttons and input for getting and adding todos.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+API routes:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+app/api/todos/route.ts → GET and POST methods.
 
-## Learn More
+Visit home page http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+Click Get Todos or type and add your own.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+▶️ Part 2 – Notion Integration with Validation
+Notion-related logic:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+packages/integrations/notion/notesync/notesync.functions.ts
 
-## Deploy on Vercel
+notesync.schema.ts and notesync.embed.ts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+API route:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+app/api/notesync/list/route.ts (uses GET method with query params like ?query=value)
+
+Try example:
+
+
+http://localhost:3000/api/notesync/list?query=hello&maxResults=2
+▶️ Part 3 – AI Chat using OpenAI
+Frontend component:
+
+app/chat/page.tsx
+
+API route:
+
+app/api/chat/route.ts
+
+Page:
+
+app/chat/page.tsx → Go to http://localhost:3000/chat
+
+Type your message, click send, and wait for AI reply.
+
+⚠️ Note: If you see 429 error, the OpenAI key quota may be finished.
+
+▶️ Part 4 – PDF Answer
+One PDF file is uploaded inside the folder itself (/todo-api/part-3_and_part_4.pdf)
+
