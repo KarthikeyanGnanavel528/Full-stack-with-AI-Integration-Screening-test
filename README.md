@@ -70,5 +70,5 @@ Type your message, click send, and wait for AI reply.
 ⚠️ Note: If you see 429 error, the OpenAI key quota may be finished.
 
 ▶️ Part 4 – PDF Answer
-One PDF file is uploaded inside the folder itself (/todo-api/part-3_and_part_4.pdf)
+One PDF file is uploaded inside the folder itself (part-3_and_part-4.pdf)
 
