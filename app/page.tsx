@@ -11,9 +11,9 @@ export default function Home() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '300px', margin: '0 auto' }}>
         <button onClick={() => router.push('/todo-test')} style={buttonStyle}>Part 1: TODO API</button>
-        <button onClick={() => router.push('api/notesync/list')} style={buttonStyle}>Part 2: Notion Notesync</button>
+        <button onClick={() => router.push('/notes')} style={buttonStyle}>Part 2: Notion Notesync</button>
         <button onClick={() => router.push('/chat')} style={buttonStyle}>Part 3: AI Chat Interface</button>
-        <button onClick={() => router.push('/summary')} style={buttonStyle}>Part 4: Notes Summary</button>
+        <button onClick={() => router.push('/summary')} style={buttonStyle}>Part 4: Developer Mindset</button>
       </div>
     </main>
   );

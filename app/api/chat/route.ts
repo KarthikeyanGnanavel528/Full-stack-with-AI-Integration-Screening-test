@@ -1,28 +1,56 @@
-import { NextResponse } from "next/server";
-import OpenAI from "openai";
+import { NextRequest, NextResponse } from "next/server";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || "";
 
-export async function POST(req: Request) {
+if (!GOOGLE_API_KEY) {
+  console.error('SERVER ERROR: GOOGLE_API_KEY environment variable is not set. Please add it to your .env.local file.');
+}
+
+const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
+
+export async function POST(req: NextRequest) {
   try {
-    const { message } = await req.json();
+    const { message } = await req.json(); 
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: message }],
-    });
+    if (!message) {
+      return NextResponse.json({ error: 'Message is required' }, { status: 400 });
+    }
 
-    // Log the entire response to check its structure (check your terminal)
-    console.log("OpenAI response:", completion);
+    console.log("Received message from client:", message);
+        
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-    // Safely get the reply content
-    const reply = completion.choices?.[0]?.message?.content || "No reply from AI";
+    
+    const result = await model.generateContent(message);
+    const response = await result.response;
+    const text = response.text(); 
 
-    return NextResponse.json({ reply });
-  } catch (error) {
-    console.error("Error in API:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    console.log("AI response text:", text);
+
+    
+    return NextResponse.json({ text }, { status: 200 }); 
+  } catch (error: any) {
+    
+    console.error('Error in API route when calling Gemini AI:', error);
+
+    
+    let clientErrorMessage = 'An internal server error occurred.';
+    let statusCode = 500;
+
+    if (error.response) {
+      
+      clientErrorMessage = `AI Service Error: ${error.message || 'Unknown API error'}. Check API key and model access.`;
+      statusCode = error.status || 500;
+      console.error('Full Google API Error Details:', {
+        status: error.status,
+        statusText: error.statusText,
+        errorDetails: error.errorDetails,
+      });
+    } else if (error instanceof Error) {
+      clientErrorMessage = `Server Error: ${error.message}`;
+    }
+
+    return NextResponse.json({ error: clientErrorMessage }, { status: statusCode });
   }
 }
