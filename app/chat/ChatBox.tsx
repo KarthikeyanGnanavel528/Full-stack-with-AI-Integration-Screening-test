@@ -27,7 +27,7 @@ export default function ChatPage() {
         const errorMessage = data.error || 'No response from AI.';
         setMessages((prev) => [...prev, `AI: Error: ${errorMessage}`]);
       }
-    } catch (err: any) {
+    } catch {
       setMessages((prev) => [...prev, 'AI: Oops! Something went wrong with your request.']);
     } finally {
       setLoading(false);
